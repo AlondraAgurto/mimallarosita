@@ -1,0 +1,124 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 30px;
+    background: #ffeaf4; /* Tu fondo rosa original */
+}
+
+/* Estilos para el contenedor del encabezado */
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    display: block; /* Asegura el orden vertical */
+}
+
+/* Tu rectángulo decorativo superior */
+.banner-superior {
+    width: 100%;          
+    max-width: 800px;     /* Ancho máximo para que no quede gigante */
+    height: 180px;        /* Alto del rectángulo */
+    object-fit: cover;    /* Evita que la imagen se deforme o estire feo */
+    border-radius: 12px;  /* Bordes redondeados estéticos */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+    margin: 0 auto 15px auto; /* Lo centra y le da separación con el título */
+    display: block;
+}
+
+h1 {
+    text-align: center;
+    color: #d63384;
+    margin: 0;
+    margin-bottom: 25px;
+}
+
+#malla {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 15px;
+    align-items: start;
+    overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+.semestre {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+.semestre h2 {
+    font-size: 14px;
+    text-align: center;
+    color: #d63384;
+    margin: 0 0 5px 0;
+}
+
+/* --- ESTILO BASE DE LAS TARJETAS --- */
+.ramo {
+    padding: 10px;
+    margin: 0;
+    width: 140px;
+    font-size: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 75px; 
+    color: #333;
+}
+
+/* --- COLORES OFICIALES POR GRUPO (Cuando están Disponibles) --- */
+.ramo.pc   { background-color: #d2418c; } /* Ciencias Básicas (Celeste) */
+.ramo.sd   { background-color: #f17bb4; } /* Sistemas Digitales (Verde) */
+.ramo.fi   { background-color: #c93c83; } /* Fundamentos Informática (Gris) */
+.ramo.tic  { background-color: #ffb3cb; } /* Redes / TICs (Morado) */
+.ramo.an   { background-color: #ff6bb8; color: white; } /* Proyectos / Gestión (Rojo) */
+.ramo.tin  { background-color: #ffa7c9; } /* Transversales / Inglés (Naranja) */
+.ramo.elec { background-color: #ff7dc2; } /* Electivos / Titulación (Rosa) */
+
+/* Cambios de color para textos claros sobre fondos oscuros (Rojo) */
+.ramo.an .ramo-codigo, .ramo.an .ramo-creditos { color: #fff; opacity: 0.8; }
+
+/* --- COMPORTAMIENTO DE ESTADOS --- */
+
+/* 1. Estado Bloqueado: Apaga el color original volviéndolo gris pálido */
+.ramo.bloqueado {
+    filter: grayscale(100%);
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* 2. Estado Disponible: Recupera su color, brilla y es interactivo */
+.ramo.disponible {
+    filter: grayscale(0%);
+    opacity: 1;
+    cursor: pointer;
+}
+
+.ramo.disponible:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+
+.ramo.aprobado {
+    background-image: linear-gradient(rgba(255, 227, 241, 0.65), rgba(214, 51, 132, 0.85)), url('aprobado.png') !important;
+    background-size: cover;          /* Hace que la imagen cubra toda la casilla sin deformarse */
+    background-position: center;     /* Centra tu foto dentro de la tarjeta */
+    color: white !important;
+    filter: grayscale(0%);
+    opacity: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(214, 51, 132, 0.5);
+    transform: scale(0.98);
+}
+
+.ramo.aprobado .ramo-codigo, .ramo.aprobado .ramo-creditos {
+    color: #ffffff !important;
+    opacity: 0.95;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra al texto por si tu foto es muy clara */
+}
