@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Mi Horario Rosita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px;
+            background: #ffeaf4;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #d63384;
+        }
+        .btn-volver {
+            background-color: #ffb3cb;
+            color: #d63384;
+            border: 2px solid #d63384;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .btn-volver:hover {
+            background-color: #d63384;
+            color: white;
+        }
+        .contenedor-acciones {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .btn-cargar {
+            background-color: #d63384;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(214,51,132,0.3);
+            display: inline-block;
+        }
+        .btn-manual {
+            background-color: white;
+            color: #d63384;
+            border: 2px solid #d63384;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        #form-manual {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #ffb3cb;
+            margin: 0 auto 30px auto;
+            max-width: 550px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .form-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-grupo input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ffb3cb;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        .selector-tipo {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 13px;
+        }
+        .selector-tipo label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .tabla-seleccion-horario {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+        .tabla-seleccion-horario th {
+            background-color: #ffeff6;
+            font-size: 11px;
+            padding: 6px;
+        }
+        .tabla-seleccion-horario td {
+            padding: 6px;
+            height: auto;
+            border: 1px solid #ffeaf4;
+        }
+        .tabla-seleccion-horario input[type="checkbox"] {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .btn-guardar {
+            background-color: #d63384;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .btn-guardar:hover {
+            background-color: #b8226b;
+        }
+        .layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .panel-oferta {
+            flex: 1;
+            min-width: 320px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .panel-calendario {
+            flex: 2;
+            min-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 13px;
+        }
+        th {
+            background-color: #ffb3cb;
+            color: #d63384;
+            padding: 12px;
+            border: 1px solid #ffa7c9;
+        }
+        td {
+            padding: 15px;
+            border: 1px solid #ffeaf4;
+            height: 60px;
+            vertical-align: middle;
+        }
+        .celda-ramo {
+            background-color: #ffeff6;
+            border-left: 4px solid #d63384;
+            border-radius: 4px;
+            padding: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #c93c83;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="btn-volver">Volver a mi Malla</a>
+    
+    <h1>🌸 Generador de Horarios Interactivo 🌸</h1>
+    <h2>Arma tu semestre ideal sin topes de hora</h2>
+
+    <div class="contenedor-acciones">
+        <label class="btn-cargar">
+            Subir Oferta (.csv)
+            <input type="file" id="input-csv" accept=".csv" style="display: none;">
+        </label>
+        <button class="btn-manual" id="btn-abrir-manual">Agregar Ramo Manual</button>
+    </div>
+
+    <!-- Formulario Ramo Manual Modificado -->
+    <div id="form-manual">
+        <h3 style="color: #d63384; margin-top: 0; font-size: 16px; text-align: center;">Añadir Ramo Manual</h3>
+        <div class="form-grupo">
+            <input type="text" id="manual-nombre" placeholder="Nombre del Ramo (ej: Cálculo III / Química)">
+            
+            <!-- Selector para especificar el tipo de bloque -->
+            <label style="font-size: 12px; font-weight: bold; color: #d63384; margin-bottom: -5px;">Tipo de bloque a registrar:</label>
+            <div class="selector-tipo">
+                <label><input type="radio" name="manual-tipo" value="Cátedra" checked> Cátedra / Clase normal</label>
+                <label><input type="radio" name="manual-tipo" value="Ayudantía"> Ayudantía</label>
+            </div>
+
+            <label style="font-size: 12px; font-weight: bold; color: #d63384; margin-bottom: -5px;">Selecciona los días y bloques:</label>
+            <table class="tabla-seleccion-horario">
+                <thead>
+                    <tr>
+                        <th>Bloque</th>
+                        <th>Lu</th>
+                        <th>Ma</th>
+                        <th>Mi</th>
+                        <th>Ju</th>
+                        <th>Vi</th>
+                    </tr>
+                </thead>
+                <tbody id="matriz-seleccion">
+                    <!-- Se genera por JS -->
+                </tbody>
+            </table>
+
+            <button class="btn-guardar" id="btn-guardar-manual">Agregar al Horario</button>
+        </div>
+    </div>
+
+    <div class="layout">
+        <!-- Izquierda: Lista de ramos con los filtros -->
+        <div class="panel-oferta">
+            <h3 style="color: #d63384; border-bottom: 2px solid #ffeaf4; padding-bottom: 10px; margin-top: 0;">Oferta Disponible</h3>
+            
+            <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                <select id="filtro-semestre" style="padding: 6px; border-radius: 6px; border: 1px solid #ffb3cb; flex: 1; font-family:'Poppins'; font-size:12px;">
+                    <option value="">Todos los Semestres</option>
+                    <option value="1">1° Semestre</option>
+                    <option value="2">2° Semestre</option>
+                    <option value="3">3° Semestre</option>
+                    <option value="4">4° Semestre</option>
+                    <option value="5">5° Semestre</option>
+                    <option value="6">6° Semestre</option>
+                    <option value="7">7° Semestre</option>
+                    <option value="8">8° Semestre</option>
+                </select>
+                <input type="text" id="buscador-ramo" placeholder="Buscar ramo..." style="padding: 6px; border-radius: 6px; border: 1px solid #ffb3cb; flex: 1; font-family:'Poppins'; font-size:12px;">
+            </div>
+
+            <div id="lista-ramos-oferta">
+                <p style="color: #999; text-align: center; font-size: 13px;">Sube tu archivo .csv para cargar las secciones automáticamente.</p>
+            </div>
+        </div>
+
+        <!-- Derecha: El Calendario -->
+        <div class="panel-calendario">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bloque</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-horario">
+                    <!-- Los bloques se arman aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript Unificado -->
+    <script>
+        const horas = [
+            "08:30 - 09:50", "10:00 - 11:20", "11:30 - 12:50", 
+            "13:00 - 14:20", "14:30 - 15:50", "16:00 - 17:20", "17:30 - 18:50"
+        ];
+        
+        const tbody = document.getElementById('cuerpo-horario');
+        for (let b = 1; b <= 7; b++) {
+            let fila = `<tr>
+                <td style="background: #fff0f5; font-weight: bold; color: #d63384;">B${b}<br><span style="font-size:10px; color:#888;">${horas[b-1]}</span></td>
+                <td id="celda-${b}-1"></td>
+                <td id="celda-${b}-2"></td>
+                <td id="celda-${b}-3"></td>
+                <td id="celda-${b}-4"></td>
+                <td id="celda-${b}-5"></td>
+            </tr>`;
+            tbody.innerHTML += fila;
+        }
+
+        const matriz = document.getElementById('matriz-seleccion');
+        for (let b = 1; b <= 7; b++) {
+            let filaMatriz = `<tr>
+                <td style="font-size:11px; font-weight:bold; color:#d63384;">B${b}</td>
+                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="1"></td>
+                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="2"></td>
+                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="3"></td>
+                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="4"></td>
+                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="5"></td>
+            </tr>`;
+            matriz.innerHTML += filaMatriz;
+        }
+
+        const btnAbrir = document.getElementById('btn-abrir-manual');
+        const formManual = document.getElementById('form-manual');
+        btnAbrir.addEventListener('click', () => {
+            formManual.style.display = formManual.style.display === 'block' ? 'none' : 'block';
+        });
+
+        let contadorManual = 0;
+
+        document.getElementById('btn-guardar-manual').addEventListener('click', () => {
+            const nombre = document.getElementById('manual-nombre').value;
+            if (!nombre) return alert("Escribe el nombre del ramo");
+
+            const tipoBloque = document.querySelector('input[name="manual-tipo"]:checked').value;
+            const checkboxes = document.querySelectorAll('.chk-bloque:checked');
+            if (checkboxes.length === 0) return alert("Selecciona al menos un bloque.");
+
+            let tieneTope = false;
+            checkboxes.forEach(chk => {
+                const b = chk.getAttribute('data-bloque');
+                const d = chk.getAttribute('data-dia');
+                const celda = document.getElementById(`celda-${b}-${d}`);
+                if (celda && celda.innerHTML !== "") {
+                    tieneTope = true;
+                }
+            });
+
+            if (tieneTope) {
+                return alert("Tope de horario. Uno o más de los bloques seleccionados ya están ocupados.");
+            }
+
+            contadorManual++;
+            const claseId = `manual-grupo-${contadorManual}`;
+
+            checkboxes.forEach(chk => {
+                const b = chk.getAttribute('data-bloque');
+                const d = chk.getAttribute('data-dia');
+                const celda = document.getElementById(`celda-${b}-${d}`);
+                
+                celda.innerHTML = `
+                    <div class="celda-ramo ${claseId}" data-grupo="${claseId}" onclick="borrarGrupoManual('${claseId}')">
+                        ${nombre} <br> 
+                        <span style="font-size:10px; font-weight:normal; color:#555;">[${tipoBloque}]</span> <br>
+                        <span style="font-size:9px; font-weight:normal; color:#888;">Quitar (X)</span>
+                    </div>`;
+            });
+
+            document.getElementById('manual-nombre').value = "";
+            document.querySelectorAll('.chk-bloque').forEach(chk => chk.checked = false);
+            document.querySelector('input[name="manual-tipo"][value="Cátedra"]').checked = true;
+            formManual.style.display = 'none';
+        });
+
+        window.borrarGrupoManual = function(claseId) {
+            const bloquesDelRamo = document.querySelectorAll(`.${claseId}`);
+            bloquesDelRamo.forEach(div => {
+                div.parentElement.innerHTML = "";
+            });
+        };
+
+        // --- LÓGICA DEL CSV ---
+        let baseDatosRamos = [];
+
+        document.getElementById('input-csv').addEventListener('change', function(e) {
+            const archivo = e.target.files[0];
+            if (!archivo) return;
+
+            const lector = new FileReader();
+            lector.onload = function(evt) {
+                const contenido = evt.target.result;
+                const lineas = contenido.split('\n');
+                baseDatosRamos = [];
+
+                for (let i = 1; i < lineas.length; i++) {
+                    if (lineas[i].trim() === "") continue;
+                    const columnas = lineas[i].split(/[,;]/); 
+                    
+                    if (columnas.length >= 4) {
+                        baseDatosRamos.push({
+                            nombre: columnas[0].replace(/"/g, '').trim(),
+                            semestre: columnas[1].replace(/"/g, '').trim(),
+                            dia: columnas[2].replace(/"/g, '').trim(), 
+                            bloque: columnas[3].replace(/"/g, '').trim()
+                        });
+                    }
+                }
+                mostrarRamosFiltrados();
+            };
+            lector.readAsText(archivo, 'UTF-8');
+        });
+
+        function mostrarRamosFiltrados() {
+            const filtroSemestre = document.getElementById('filtro-semestre').value;
+            const buscador = document.getElementById('buscador-ramo').value.toLowerCase();
+            const listaDiv = document.getElementById('lista-ramos-oferta');
+            
+            listaDiv.innerHTML = ""; 
+
+            const ramosFiltrados = baseDatosRamos.filter(ramo => {
+                const coincideSemestre = filtroSemestre === "" || ramo.semestre === filtroSemestre;
+                const coincideBuscador = ramo.nombre.toLowerCase().includes(buscador);
+                return coincideSemestre && coincideBuscador;
+            });
+
+            if (ramosFiltrados.length === 0) {
+                listaDiv.innerHTML = `<p style="color:#999; text-align:center;">No se encontraron ramos.</p>`;
+                return;
+            }
+
+            ramosFiltrados.forEach((ramo) => {
+                const item = document.createElement('div');
+                item.style.padding = '10px';
+                item.style.background = '#ffeff6';
+                item.style.border = '1px solid #ffb3cb';
+                item.style.borderRadius = '8px';
+                item.style.marginBottom = '8px';
+                item.style.cursor = 'pointer';
+                item.style.display = 'flex';
+                item.style.justifyContent = 'space-between';
+                item.style.alignItems = 'center';
+                item.innerHTML = `
+                    <div>
+                        <strong>${ramo.nombre}</strong><br>
+                        <span style="font-size:11px; color:#888;">Semestre ${ramo.semestre} | Bloque ${ramo.bloque}</span>
+                    </div>
+                    <button style="background:#d63384; color:white; border:none; border-radius:12px; padding:4px 10px; font-size:11px; cursor:pointer;">+</button>
+                `;
+                
+                item.addEventListener('click', () => {
+                    const celda = document.getElementById(`celda-${ramo.bloque}-${ramo.dia}`);
+                    if (celda && celda.innerHTML !== "") {
+                        alert(`Tope de horario. No puedes agregar "${ramo.nombre}".`);
+                    } else if(celda) {
+                        celda.innerHTML = `<div class="celda-ramo" onclick="this.parentElement.innerHTML=''">${ramo.nombre} <br> <span style="font-size:9px; font-weight:normal; color:#666;">Sección CSV (X)</span></div>`;
+                    }
+                });
+
+                listaDiv.appendChild(item);
+            });
+        }
+
+        document.getElementById('filtro-semestre').addEventListener('change', mostrarRamosFiltrados);
+        document.getElementById('buscador-ramo').addEventListener('input', mostrarRamosFiltrados);
+    </script>
+</body>
+</html>
