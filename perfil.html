@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Mi Perfil Privado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px;
+            background: #ffeaf4;
+            color: #333;
+        }
+        .contenedor-perfil {
+            background: white;
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #ffb3cb;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        h1 { color: #d63384; margin-bottom: 20px; font-size: 22px; }
+        .btn-volver {
+            background-color: #ffb3cb;
+            color: #d63384;
+            border: 2px solid #d63384;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .grupo-campo {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        label {
+            font-weight: bold;
+            color: #d63384;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ffb3cb;
+            border-radius: 6px;
+            font-family: 'Poppins';
+            box-sizing: border-box;
+        }
+        .btn-guardar {
+            background: #d63384;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 14px;
+        }
+        .lista-notas {
+            margin-top: 25px;
+            text-align: left;
+            border-top: 2px solid #ffeaf4;
+            padding-top: 15px;
+        }
+        .semestre-bloque {
+            margin-top: 20px;
+            border-bottom: 1px dashed #ffb3cb;
+            padding-bottom: 10px;
+        }
+        .semestre-bloque:last-child {
+            border-bottom: none;
+        }
+        .semestre-titulo-notas {
+            font-size: 14px;
+            font-weight: bold;
+            color: #d63384;
+            background: #ffeff6;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .fila-nota {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fffdfd;
+            border: 1px solid #ffeff6;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .fila-nota input {
+            width: 65px;
+            padding: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="btn-volver">Volver a mi Malla</a>
+    </div>
+
+    <div class="contenedor-perfil">
+        <h1>🌸 Mi Perfil Académico Privado</h1>
+        
+        <!-- Semestre Actual -->
+        <div class="grupo-campo">
+            <label>¿En qué semestre vas actualmente?</label>
+            <select id="select-semestre">
+                <option value="1° Semestre">1° Semestre</option>
+                <option value="2° Semestre">2° Semestre</option>
+                <option value="3° Semestre">3° Semestre</option>
+                <option value="4° Semestre">4° Semestre</option>
+                <option value="5° Semestre">5° Semestre</option>
+                <option value="6° Semestre">6° Semestre</option>
+                <option value="7° Semestre">7° Semestre</option>
+                <option value="8° Semestre">8° Semestre</option>
+                <option value="9° Semestre">9° Semestre</option>
+                <option value="10° Semestre">10° Semestre</option>
+            </select>
+        </div>
+
+        <button class="btn-guardar" id="btn-guardar-perfil">Guardar Semestre</button>
+
+        <!-- Bloque de Ramos por Semestre -->
+        <div class="lista-notas">
+            <h3 style="color: #d63384; margin-top: 0; font-size: 15px;">Historial de Notas por Semestre</h3>
+            <p style="font-size: 11px; color: #888; margin-bottom: 15px;">Ingresa tus notas finales (Escala 1.0 a 7.0). Las notas se guardan automáticamente al escribirlas.</p>
+            
+            <div id="contenedor-semestres-notas">
+                <!-- Se llena dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Conexión obligatoria con tus datos originales -->
+    <script src="data.js"></script>
+    <script>
+        // Cargar semestre actual guardado
+        const selectSemestre = document.getElementById('select-semestre');
+        selectSemestre.value = localStorage.getItem('perfil_semestre') || "1° Semestre";
+
+        document.getElementById('btn-guardar-perfil').addEventListener('click', () => {
+            localStorage.setItem('perfil_semestre', selectSemestre.value);
+            alert("Semestre actualizado correctamente 🌸");
+        });
+
+        // Cargar y agrupar ramos aprobados desde la lista real de la malla
+        function cargarHistorialNotas() {
+            const notasGuardadas = JSON.parse(localStorage.getItem('perfil_notas')) || {};
+            const contenedorGeneral = document.getElementById('contenedor-semestres-notas');
+            contenedorGeneral.innerHTML = "";
+
+            const ramosPorSemestre = {};
+
+            // 1. Leer el array exacto que guarda tu script.js
+            const aprobadosGuardados = JSON.parse(localStorage.getItem("ramosAprobados")) || [];
+
+            // 2. Mapear cada ID aprobado con su información real dentro de data.js
+            aprobadosGuardados.forEach(ramoId => {
+                let infoRamo = null;
+                
+                if (typeof malla !== 'undefined') {
+                    // Recorremos los semestres s1, s2, s3... del objeto malla
+                    for (const sem in malla) {
+                        const encontrado = malla[sem].find(r => r[1] === ramoId);
+                        if (encontrado) {
+                            infoRamo = {
+                                nombre: encontrado[0],
+                                semestre: sem.replace("s", "") // "s1" pasa a "1"
+                            };
+                            break;
+                        }
+                    }
+                }
+
+                const numSemestre = infoRamo ? infoRamo.semestre : "Otros";
+                const nombreRamo = infoRamo ? infoRamo.nombre : ramoId;
+
+                if (!ramosPorSemestre[numSemestre]) {
+                    ramosPorSemestre[numSemestre] = [];
+                }
+
+                ramosPorSemestre[numSemestre].push({
+                    id: ramoId,
+                    nombre: nombreRamo
+                });
+            });
+
+            // Ordenar los semestres numéricamente
+            const listaSemestresOrdenados = Object.keys(ramosPorSemestre).sort((a, b) => parseInt(a) - parseInt(b));
+
+            if (listaSemestresOrdenados.length === 0) {
+                contenedorGeneral.innerHTML = `<p style="color:#999; font-size:12px; text-align:center;">No has marcado ningún ramo como aprobado en tu malla todavía.<br><br>Ve a la malla, haz clic en tus ramos completados y aquí te aparecerán listos para poner la nota.</p>`;
+                return;
+            }
+
+            // 3. Dibujar la interfaz en pantalla
+            listaSemestresOrdenados.forEach(sem => {
+                const bloqueSemestre = document.createElement('div');
+                bloqueSemestre.className = 'semestre-bloque';
+
+                const titulo = document.createElement('div');
+                titulo.className = 'semestre-titulo-notas';
+                titulo.innerText = isNaN(sem) ? sem : `${sem}° Semestre`;
+                bloqueSemestre.appendChild(titulo);
+
+                ramosPorSemestre[sem].forEach(ramo => {
+                    const notaActual = notasGuardadas[ramo.id] || "";
+
+                    const fila = document.createElement('div');
+                    fila.className = 'fila-nota';
+                    fila.innerHTML = `
+                        <span><strong>${ramo.nombre}</strong></span>
+                        <input type="number" step="0.1" min="1" max="7" value="${notaActual}" placeholder="0.0" data-id="${ramo.id}" class="input-nota">
+                    `;
+                    bloqueSemestre.appendChild(fila);
+                });
+
+                contenedorGeneral.appendChild(bloqueSemestre);
+            });
+
+            // 4. Guardado automático en tiempo real
+            document.querySelectorAll('.input-nota').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const ramoId = e.target.getAttribute('data-id');
+                    let valor = parseFloat(e.target.value);
+
+                    // Forzar topes de escala chilena (1.0 a 7.0)
+                    if (valor > 7) { valor = 7; e.target.value = 7; }
+                    if (valor < 1) valor = "";
+
+                    const notas = JSON.parse(localStorage.getItem('perfil_notas')) || {};
+                    if (valor) {
+                        notas[ramoId] = valor;
+                    } else {
+                        delete notas[ramoId];
+                    }
+                    localStorage.setItem('perfil_notas', JSON.stringify(notas));
+                });
+            });
+        }
+
+        // Cargar todo apenas cargue el DOM
+        window.addEventListener('DOMContentLoaded', cargarHistorialNotas);
+    </script>
+</body>
+</html>

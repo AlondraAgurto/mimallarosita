@@ -4,22 +4,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Malla </title>
+    <title>Mi Malla</title>
 
     <link rel="stylesheet" href="style.css">
-    <div style="text-align: center; margin-bottom: 20px;">
-    <a href="horario.html" style="background-color: #d63384; color: white; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 4px 10px rgba(214,51,132,0.3);">
-        Ir al Generador de Horarios 🌸
-    </a>
-    </div>
 </head>
-
 
 <body>
 
     <header>
+        <img src="mizibaner.jpg" alt="Banner Deco" class="banner-superior">
         <h1>Malla de Ingeniería Civil Informática</h1>
     </header>
+
+    <!-- Tarjeta Fija de Perfil Rosita -->
+    <a href="perfil.html" style="background: white; max-width: 400px; margin: 10px auto 25px auto; padding: 12px 20px; border-radius: 15px; border: 2px solid #ffb3cb; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; text-decoration: none; color: #333; transition: 0.2s; cursor: pointer;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: #ffeff6; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid #d63384;">🌸</div>
+        <div style="text-align: left;">
+            <h3 style="margin: 0; color: #d63384; font-size: 15px; font-weight: 600;">Mi Perfil Universitario</h3>
+            <p id="txt-semestre" style="margin: 2px 0 0 0; font-size: 12px; color: #666;">Cargando semestre...</p>
+        </div>
+        <div id="txt-promedio" style="margin-left: auto; background: #ffeff6; border: 1px solid #d63384; color: #d63384; padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 14px;">-.-</div>
+    </a>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="horario.html" style="background-color: #d63384; color: white; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 4px 10px rgba(214,51,132,0.3); display: inline-block;">
+            Ir al Generador de Horarios 🌸
+        </a>
+    </div>
 
     <main>
         <div id="malla"></div>
@@ -28,8 +39,26 @@
     <script src="data.js"></script>
     <script src="script.js"></script>
 
-    <header>
-    <img src="mizibaner.jpg" alt="Banner Deco" class="banner-superior">
-</header>
+    <!-- Pequeño script para conectar los datos globales del perfil con la tarjeta -->
+    <script>
+        function actualizarTarjetaPerfil() {
+            const semestreActual = localStorage.getItem('perfil_semestre') || "No definido";
+            document.getElementById('txt-semestre').innerText = `Semestre actual: ${semestreActual}`;
+
+            const notasGuardadas = JSON.parse(localStorage.getItem('perfil_notas')) || {};
+            const notas = Object.values(notasGuardadas).map(Number).filter(n => n > 0);
+            
+            if (notas.length > 0) {
+                const suma = notas.reduce((a, b) => a + b, 0);
+                const promedio = (suma / notas.length).toFixed(2);
+                document.getElementById('txt-promedio').innerText = promedio;
+            } else {
+                document.getElementById('txt-promedio').innerText = "-.-";
+            }
+        }
+        
+        // Ejecutar al cargar la página de la malla
+        window.addEventListener('DOMContentLoaded', actualizarTarjetaPerfil);
+    </script>
 </body>
 </html>
