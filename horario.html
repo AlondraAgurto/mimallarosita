@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 Mi Horario Rosita</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Mi Horario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -13,7 +13,7 @@
             background: #ffeaf4;
             color: #333;
         }
-        h1, h2 {
+        h1, h2, h3 {
             text-align: center;
             color: #d63384;
         }
@@ -34,425 +34,633 @@
             background-color: #d63384;
             color: white;
         }
-        .contenedor-acciones {
+        .contenedor-horario {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .btn-cargar {
-            background-color: #d63384;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            box-shadow: 0 4px 10px rgba(214,51,132,0.3);
-            display: inline-block;
-        }
-        .btn-manual {
-            background-color: white;
-            color: #d63384;
-            border: 2px solid #d63384;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        #form-manual {
-            display: none;
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
             background: white;
             padding: 25px;
-            border-radius: 12px;
+            border-radius: 15px;
             border: 2px solid #ffb3cb;
-            margin: 0 auto 30px auto;
-            max-width: 550px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
         }
-        .form-grupo {
+        .panel-izquierdo {
+            width: 340px;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-        .form-grupo input[type="text"] {
+        .buscador, .filtro {
+            width: 100%;
             padding: 10px;
             border: 1px solid #ffb3cb;
             border-radius: 6px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-        }
-        .selector-tipo {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
+            font-family: 'Poppins';
+            box-sizing: border-box;
             font-size: 13px;
+            margin-bottom: 10px;
         }
-        .selector-tipo label {
+        .seccion-subpanel {
+            background: #fff5f9;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ffb3cb;
+        }
+        .seccion-subpanel h3 {
+            margin-top: 0;
+            font-size: 14px;
+            text-align: left;
+            border-bottom: 1px solid #ffb3cb;
+            padding-bottom: 5px;
+        }
+        .lista-ramos {
+            overflow-y: auto;
+            max-height: 250px;
+            border: 1px solid #ffeaf4;
+            border-radius: 8px;
+            padding: 5px;
+            background: #fffdfd;
+            margin-top: 8px;
+        }
+        /* Acordeón por Ramo */
+        .grupo-ramo-contenedor {
+            margin-bottom: 8px;
+            border: 1px solid #ffcbdc;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff0f6;
+        }
+        .grupo-ramo-cabecera {
+            background: #ffcbdc;
+            color: #b8226b;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .grupo-ramo-secciones {
+            padding: 6px;
+            background: #fffdfd;
+            display: none; /* Se maneja por JS */
+        }
+        .ramo-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            background: #ffeff6;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 11.5px;
         }
-        .tabla-seleccion-horario {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 5px;
-        }
-        .tabla-seleccion-horario th {
-            background-color: #ffeff6;
+        .item-oferta-seccion {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff5f9;
+            padding: 6px 8px;
+            border-radius: 4px;
+            margin-bottom: 5px;
             font-size: 11px;
-            padding: 6px;
+            border: 1px solid #ffe1ec;
         }
-        .tabla-seleccion-horario td {
-            padding: 6px;
-            height: auto;
-            border: 1px solid #ffeaf4;
-        }
-        .tabla-seleccion-horario input[type="checkbox"] {
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-        .btn-guardar {
-            background-color: #d63384;
+        .btn-add-seccion {
+            background: #d63384;
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 6px;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 20px;
+            text-align: center;
+        }
+        .btn-delete-seccion {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 20px;
+            text-align: center;
+        }
+        .btn-especificaciones {
+            background: #ffb3cb;
+            color: #d63384;
+            border: 1px solid #d63384;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 9.5px;
+            font-family: 'Poppins';
             cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
-            transition: 0.2s;
         }
-        .btn-guardar:hover {
-            background-color: #b8226b;
+        .btn-especificaciones:hover {
+            background: #d63384;
+            color: white;
         }
-        .layout {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-        .panel-oferta {
-            flex: 1;
-            min-width: 320px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        .panel-calendario {
-            flex: 2;
-            min-width: 600px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            overflow-x: auto;
-        }
-        table {
+        .btn-manual-global {
+            background-color: #ff7dc2;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Poppins';
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
             width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            font-size: 13px;
+            transition: 0.2s;
+            margin-bottom: 5px;
         }
-        th {
-            background-color: #ffb3cb;
+        .btn-manual-global:hover {
+            background-color: #d63384;
+        }
+        .chip-elegido {
+            display: inline-flex;
+            align-items: center;
+            background: #ffeff6;
             color: #d63384;
-            padding: 12px;
-            border: 1px solid #ffa7c9;
-        }
-        td {
-            padding: 15px;
-            border: 1px solid #ffeaf4;
-            height: 60px;
-            vertical-align: middle;
-        }
-        .celda-ramo {
-            background-color: #ffeff6;
-            border-left: 4px solid #d63384;
-            border-radius: 4px;
-            padding: 5px;
+            padding: 4px 10px;
+            border-radius: 15px;
             font-size: 11px;
             font-weight: bold;
-            color: #c93c83;
-            cursor: pointer;
+            margin: 3px;
+            border: 1px solid #ffb3cb;
+        }
+        .tabla-horario {
+            flex-grow: 1;
+            border-collapse: collapse;
+            background: white;
+            min-width: 650px;
+        }
+        .tabla-horario th {
+            background: #d63384;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ffb3cb;
+        }
+        .tabla-horario td {
+            border: 1px solid #ffb3cb;
+            width: 150px;
+            height: 55px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+        }
+        .columna-hora {
+            background: #ffeff6;
+            font-weight: bold;
+            color: #d63384;
+            width: 110px !important;
+        }
+        .celda-ramo {
+            background: #ff7dc2;
+            color: white;
+            padding: 6px;
+            border-radius: 6px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(214,51,132,0.2);
+            line-height: 1.3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 360px;
+            border: 2px solid #ffb3cb;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .modal-content h3 { margin-top: 0; color: #d63384;}
+        .modal-content label { font-size: 12px; font-weight: bold; color: #666; display: block; margin-top: 8px; }
+        .modal-content input, .modal-content select { width: 100%; padding: 6px; box-sizing: border-box; border-radius: 5px; border: 1px solid #ffb3cb; font-family: 'Poppins'; font-size: 13px; }
+        .modal-botones { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
+        .btn-modal-guardar { background: #d63384; color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-family: 'Poppins'; }
+        .btn-modal-cerrar { background: #eee; color: #333; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Poppins'; }
+        
+        .info-panel-item {
+            background: #fff5f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 6px;
+            font-size: 12px;
+            border: 1px solid #ffe1ec;
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="btn-volver">Volver a mi Malla</a>
+    <div style="text-align: left;">
+        <a href="index.html" class="btn-volver">Volver a mi Malla</a>
+    </div>
     
-    <h1>🌸 Generador de Horarios Interactivo 🌸</h1>
-    <h2>Arma tu semestre ideal sin topes de hora</h2>
+    <div class="seccion-subpanel" style="max-width: 320px; margin: 0 auto 20px auto;">
+        <h3>Configuración</h3>
+        <label style="font-weight:bold; color:#d63384; display:block; margin-bottom:6px;">Semestre a planificar</label>
+        <select id="filtro-semestre" class="filtro">
+            <option value="">Seleccione un semestre</option>
+            <option value="1">1 Semestre</option>
+            <option value="2">2 Semestre</option>
+            <option value="3">3 Semestre</option>
+            <option value="4">4 Semestre</option>
+            <option value="5">5 Semestre</option>
+            <option value="6">6 Semestre</option>
+            <option value="7">7 Semestre</option>
+            <option value="8">8 Semestre</option>
+            <option value="9">9 Semestre</option>
+            <option value="10">10 Semestre</option>
+        </select>
 
-    <div class="contenedor-acciones">
-        <label class="btn-cargar">
-            Subir Oferta (.csv)
-            <input type="file" id="input-csv" accept=".csv" style="display: none;">
-        </label>
-        <button class="btn-manual" id="btn-abrir-manual">Agregar Ramo Manual</button>
-    </div>
-
-    <!-- Formulario Ramo Manual Modificado -->
-    <div id="form-manual">
-        <h3 style="color: #d63384; margin-top: 0; font-size: 16px; text-align: center;">Añadir Ramo Manual</h3>
-        <div class="form-grupo">
-            <input type="text" id="manual-nombre" placeholder="Nombre del Ramo (ej: Cálculo III / Química)">
-            
-            <!-- Selector para especificar el tipo de bloque -->
-            <label style="font-size: 12px; font-weight: bold; color: #d63384; margin-bottom: -5px;">Tipo de bloque a registrar:</label>
-            <div class="selector-tipo">
-                <label><input type="radio" name="manual-tipo" value="Cátedra" checked> Cátedra / Clase normal</label>
-                <label><input type="radio" name="manual-tipo" value="Ayudantía"> Ayudantía</label>
-            </div>
-
-            <label style="font-size: 12px; font-weight: bold; color: #d63384; margin-bottom: -5px;">Selecciona los días y bloques:</label>
-            <table class="tabla-seleccion-horario">
-                <thead>
-                    <tr>
-                        <th>Bloque</th>
-                        <th>Lu</th>
-                        <th>Ma</th>
-                        <th>Mi</th>
-                        <th>Ju</th>
-                        <th>Vi</th>
-                    </tr>
-                </thead>
-                <tbody id="matriz-seleccion">
-                    <!-- Se genera por JS -->
-                </tbody>
-            </table>
-
-            <button class="btn-guardar" id="btn-guardar-manual">Agregar al Horario</button>
+        <div style="margin-bottom: 10px;">
+            <label for="input-horario-csv" class="btn-manual-global" style="display: inline-block; text-align: center; box-sizing: border-box; width: 100%; margin: 0;">Subir Oferta (CSV)</label>
+            <input type="file" id="input-horario-csv" accept=".csv" style="display: none;">
         </div>
+        <button class="btn-manual-global" id="btn-abrir-manual">Agregar Ramo Manual</button>
     </div>
 
-    <div class="layout">
-        <!-- Izquierda: Lista de ramos con los filtros -->
-        <div class="panel-oferta">
-            <h3 style="color: #d63384; border-bottom: 2px solid #ffeaf4; padding-bottom: 10px; margin-top: 0;">Oferta Disponible</h3>
-            
-            <div style="margin-bottom: 15px; display: flex; gap: 10px;">
-                <select id="filtro-semestre" style="padding: 6px; border-radius: 6px; border: 1px solid #ffb3cb; flex: 1; font-family:'Poppins'; font-size:12px;">
-                    <option value="">Todos los Semestres</option>
-                    <option value="1">1° Semestre</option>
-                    <option value="2">2° Semestre</option>
-                    <option value="3">3° Semestre</option>
-                    <option value="4">4° Semestre</option>
-                    <option value="5">5° Semestre</option>
-                    <option value="6">6° Semestre</option>
-                    <option value="7">7° Semestre</option>
-                    <option value="8">8° Semestre</option>
-                </select>
-                <input type="text" id="buscador-ramo" placeholder="Buscar ramo..." style="padding: 6px; border-radius: 6px; border: 1px solid #ffb3cb; flex: 1; font-family:'Poppins'; font-size:12px;">
+    <h1>Mi Generador de Horarios</h1>
+
+    <div class="contenedor-horario">
+        <div class="panel-izquierdo">
+            <h2>Asignaturas</h2>
+
+            <div class="seccion-subpanel">
+                <h3>1. Ramos Proyectados (Malla)</h3>
+                <div id="lista-ramos-disponibles" class="lista-ramos"></div>
             </div>
 
-            <div id="lista-ramos-oferta">
-                <p style="color: #999; text-align: center; font-size: 13px;">Sube tu archivo .csv para cargar las secciones automáticamente.</p>
+            <div class="seccion-subpanel" style="background: white;">
+                <h3>2. Fijar Secciones (Oferta CSV)</h3>
+                <input type="text" id="buscador-ramo" class="buscador" placeholder="Buscar código o asignatura...">
+                <div id="lista-oferta-busqueda" class="lista-ramos" style="max-height: 280px;">
+                    <p style="color:#999; text-align:center; font-size:11px; margin-top:15px;">Sube un CSV para buscar y fijar.</p>
+                </div>
+            </div>
+
+            <div class="seccion-subpanel" style="background: #fffbfe; border-style: dashed;">
+                <h3 style="color:#b8226b;">Secciones fijadas por ti:</h3>
+                <div id="contenedor-chips-fijos">
+                    <span style="color:#999; font-size:11px;">Ninguna sección fija.</span>
+                </div>
             </div>
         </div>
 
-        <!-- Derecha: El Calendario -->
-        <div class="panel-calendario">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Bloque</th>
-                        <th>Lunes</th>
-                        <th>Martes</th>
-                        <th>Miércoles</th>
-                        <th>Jueves</th>
-                        <th>Viernes</th>
-                    </tr>
-                </thead>
-                <tbody id="cuerpo-horario">
-                    <!-- Los bloques se arman aquí dinámicamente -->
-                </tbody>
-            </table>
+        <table class="tabla-horario">
+            <thead>
+                <tr>
+                    <th>Bloque</th>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <script>
+                    const diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
+                    const bloquesHoras = [
+                        "Bloque 1 (08:15 - 09:25)",
+                        "Bloque 2 (09:35 - 10:45)",
+                        "Bloque 3 (10:55 - 12:05)",
+                        "Bloque 4 (12:15 - 13:25)",
+                        "Bloque 5 (14:30 - 15:40)",
+                        "Bloque 6 (15:50 - 17:00)",
+                        "Bloque 7 (17:10 - 18:20)",
+                        "Bloque 8 (18:30 - 19:40)"
+                    ];
+                    bloquesHoras.forEach((hora, index) => {
+                        const numBloque = index + 1;
+                        document.write(`<tr><td class="columna-hora">${hora}</td>`);
+                        diasSemana.forEach(dia => { document.write(`<td id="celda-${numBloque}-${dia}"></td>`); });
+                        document.write(`</tr>`);
+                    });
+                </script>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modales -->
+    <div id="modal-manual" class="modal">
+        <div class="modal-content">
+            <h3>Agregar Ramo Manual</h3>
+            <label>Nombre del Ramo</label><input type="text" id="m-nombre" placeholder="Ej: Álgebra">
+            <label>Día</label>
+            <select id="m-dia">
+                <option value="Lunes">Lunes</option><option value="Martes">Martes</option><option value="Miercoles">Miércoles</option><option value="Jueves">Jueves</option><option value="Viernes">Viernes</option>
+            </select>
+            <label>Bloque</label>
+            <select id="m-bloque">
+                <option value="1">Bloque 1</option><option value="2">Bloque 2</option><option value="3">Bloque 3</option><option value="4">Bloque 4</option><option value="5">Bloque 5</option><option value="6">Bloque 6</option><option value="7">Bloque 7</option><option value="8">Bloque 8</option>
+            </select>
+            <div class="modal-botones">
+                <button class="btn-modal-cerrar" id="btn-cerrar-manual">Cancelar</button>
+                <button class="btn-modal-guardar" id="btn-guardar-manual">Fijar Ramo</button>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript Unificado -->
+    <div id="modal-especificaciones" class="modal">
+        <div class="modal-content" style="width: 420px;">
+            <h3>Detalles de la Asignatura</h3>
+            <div id="contenido-especificaciones"></div>
+            <div class="modal-botones"><button class="btn-modal-cerrar" id="btn-cerrar-especificaciones">Cerrar</button></div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
     <script>
-        const horas = [
-            "08:30 - 09:50", "10:00 - 11:20", "11:30 - 12:50", 
-            "13:00 - 14:20", "14:30 - 15:50", "16:00 - 17:20", "17:30 - 18:50"
-        ];
-        
-        const tbody = document.getElementById('cuerpo-horario');
-        for (let b = 1; b <= 7; b++) {
-            let fila = `<tr>
-                <td style="background: #fff0f5; font-weight: bold; color: #d63384;">B${b}<br><span style="font-size:10px; color:#888;">${horas[b-1]}</span></td>
-                <td id="celda-${b}-1"></td>
-                <td id="celda-${b}-2"></td>
-                <td id="celda-${b}-3"></td>
-                <td id="celda-${b}-4"></td>
-                <td id="celda-${b}-5"></td>
-            </tr>`;
-            tbody.innerHTML += fila;
-        }
+        let databaseOfertaCSV = {}; 
+        let seccionesFijadasManualmente = {}; 
+        let estadosAcordeon = {}; // Guarda qué ramos están expandidos para que no se cierren solos al redibujar
 
-        const matriz = document.getElementById('matriz-seleccion');
-        for (let b = 1; b <= 7; b++) {
-            let filaMatriz = `<tr>
-                <td style="font-size:11px; font-weight:bold; color:#d63384;">B${b}</td>
-                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="1"></td>
-                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="2"></td>
-                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="3"></td>
-                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="4"></td>
-                <td><input type="checkbox" class="chk-bloque" data-bloque="${b}" data-dia="5"></td>
-            </tr>`;
-            matriz.innerHTML += filaMatriz;
-        }
-
-        const btnAbrir = document.getElementById('btn-abrir-manual');
-        const formManual = document.getElementById('form-manual');
-        btnAbrir.addEventListener('click', () => {
-            formManual.style.display = formManual.style.display === 'block' ? 'none' : 'block';
-        });
-
-        let contadorManual = 0;
+        // Control modales
+        document.getElementById('btn-abrir-manual').addEventListener('click', () => document.getElementById('modal-manual').style.display = 'block');
+        document.getElementById('btn-cerrar-manual').addEventListener('click', () => document.getElementById('modal-manual').style.display = 'none');
+        document.getElementById('btn-cerrar-especificaciones').addEventListener('click', () => document.getElementById('modal-especificaciones').style.display = 'none');
 
         document.getElementById('btn-guardar-manual').addEventListener('click', () => {
-            const nombre = document.getElementById('manual-nombre').value;
-            if (!nombre) return alert("Escribe el nombre del ramo");
-
-            const tipoBloque = document.querySelector('input[name="manual-tipo"]:checked').value;
-            const checkboxes = document.querySelectorAll('.chk-bloque:checked');
-            if (checkboxes.length === 0) return alert("Selecciona al menos un bloque.");
-
-            let tieneTope = false;
-            checkboxes.forEach(chk => {
-                const b = chk.getAttribute('data-bloque');
-                const d = chk.getAttribute('data-dia');
-                const celda = document.getElementById(`celda-${b}-${d}`);
-                if (celda && celda.innerHTML !== "") {
-                    tieneTope = true;
-                }
-            });
-
-            if (tieneTope) {
-                return alert("Tope de horario. Uno o más de los bloques seleccionados ya están ocupados.");
-            }
-
-            contadorManual++;
-            const claseId = `manual-grupo-${contadorManual}`;
-
-            checkboxes.forEach(chk => {
-                const b = chk.getAttribute('data-bloque');
-                const d = chk.getAttribute('data-dia');
-                const celda = document.getElementById(`celda-${b}-${d}`);
-                
-                celda.innerHTML = `
-                    <div class="celda-ramo ${claseId}" data-grupo="${claseId}" onclick="borrarGrupoManual('${claseId}')">
-                        ${nombre} <br> 
-                        <span style="font-size:10px; font-weight:normal; color:#555;">[${tipoBloque}]</span> <br>
-                        <span style="font-size:9px; font-weight:normal; color:#888;">Quitar (X)</span>
-                    </div>`;
-            });
-
-            document.getElementById('manual-nombre').value = "";
-            document.querySelectorAll('.chk-bloque').forEach(chk => chk.checked = false);
-            document.querySelector('input[name="manual-tipo"][value="Cátedra"]').checked = true;
-            formManual.style.display = 'none';
+            const nom = document.getElementById('m-nombre').value.trim();
+            const dia = document.getElementById('m-dia').value;
+            const bloq = parseInt(document.getElementById('m-bloque').value);
+            if(!nom) return;
+            const llaveGrupo = `MANUAL-${Date.now()}`;
+            seccionesFijadasManualmente[llaveGrupo] = {
+                codigo: "MANUAL", nombre: nom, seccion: "M1", profesor: 'Por asignar',
+                bloquesAcumulados: [{ dia: dia, bloque: bloq, tipo: 'Cát' }]
+            };
+            actualizarChipsFijos(); renderizarCalendario(); renderizarBuscadorOferta();
+            document.getElementById('modal-manual').style.display = 'none';
+            document.getElementById('m-nombre').value = '';
         });
 
-        window.borrarGrupoManual = function(claseId) {
-            const bloquesDelRamo = document.querySelectorAll(`.${claseId}`);
-            bloquesDelRamo.forEach(div => {
-                div.parentElement.innerHTML = "";
-            });
-        };
+        function obtenerBloquePorTextoHora(texto) {
+            if (!texto) return null;
+            if (texto.includes("08:15") || texto.includes("08:30")) return 1;
+            if (texto.includes("09:35") || texto.includes("09:45")) return 2;
+            if (texto.includes("10:55") || texto.includes("10:00")) return 3; 
+            if (texto.includes("12:15") || texto.includes("13:00")) return 4; 
+            if (texto.includes("14:30")) return 5;
+            if (texto.includes("15:50")) return 6;
+            if (texto.includes("17:10")) return 7;
+            if (texto.includes("18:30")) return 8;
+            return null;
+        }
 
-        // --- LÓGICA DEL CSV ---
-        let baseDatosRamos = [];
+        function desglosarDias(texto) {
+            let indices = []; if (!texto) return indices; let t = texto.toUpperCase();
+            if (t.includes("LU")) indices.push("Lunes"); if (t.includes("MA")) indices.push("Martes");
+            if (t.includes("MI")) indices.push("Miercoles"); if (t.includes("JU")) indices.push("Jueves");
+            if (t.includes("VI")) indices.push("Viernes"); return indices;
+        }
 
-        document.getElementById('input-csv').addEventListener('change', function(e) {
-            const archivo = e.target.files[0];
-            if (!archivo) return;
+        function inicializarListadoMallaOficial() {
+            const filtro = document.getElementById('filtro-semestre').value;
+            const contenedor = document.getElementById('lista-ramos-disponibles');
+            contenedor.innerHTML = "";
+            if (typeof malla === 'undefined') return;
 
+            for (const semKey in malla) {
+                if (filtro !== "" && filtro !== semKey.replace("s", "")) continue;
+                malla[semKey].forEach(ramo => {
+                    const div = document.createElement('div');
+                    div.className = 'ramo-item';
+                    div.innerHTML = `<input type="checkbox" class="chk-ramo-proyectado" data-codigo="${ramo[1]}" data-nombre="${ramo[0]}"> <span><b>${ramo[1]}</b> - ${ramo[0]}</span>`;
+                    div.querySelector('input').addEventListener('change', renderizarBuscadorOferta);
+                    contenedor.appendChild(div);
+                });
+            }
+            renderizarBuscadorOferta();
+        }
+
+        document.getElementById('input-horario-csv').addEventListener('change', function(e) {
+            const archivo = e.target.files[0]; if (!archivo) return;
             const lector = new FileReader();
             lector.onload = function(evt) {
-                const contenido = evt.target.result;
-                const lineas = contenido.split('\n');
-                baseDatosRamos = [];
-
+                const lineas = evt.target.result.split('\n');
+                databaseOfertaCSV = {}; 
                 for (let i = 1; i < lineas.length; i++) {
-                    if (lineas[i].trim() === "") continue;
-                    const columnas = lineas[i].split(/[,;]/); 
-                    
-                    if (columnas.length >= 4) {
-                        baseDatosRamos.push({
-                            nombre: columnas[0].replace(/"/g, '').trim(),
-                            semestre: columnas[1].replace(/"/g, '').trim(),
-                            dia: columnas[2].replace(/"/g, '').trim(), 
-                            bloque: columnas[3].replace(/"/g, '').trim()
-                        });
+                    const columnas = lineas[i].trim().split(';');
+                    if (columnas.length >= 7 && columnas[0].trim() !== "") {
+                        const codigo = columnas[0].replace(/"/g, '').trim();
+                        const nombre = columnas[1].replace(/"/g, '').trim();
+                        const seccion = columnas[4].replace(/"/g, '').trim();
+                        let profesor = columnas[7] ? columnas[7].replace(/"/g, '').trim() : "Por asignar";
+                        let tipoEvento = columnas[5].replace(/"/g, '').trim().toUpperCase(); 
+                        const bloque = obtenerBloquePorTextoHora(columnas[6].replace(/"/g, '').trim());
+                        const dias = desglosarDias(columnas[6].replace(/"/g, '').trim());
+                        const llaveGrupo = `${codigo}-${seccion}`;
+
+                        if (bloque && dias.length > 0) {
+                            if (!databaseOfertaCSV[llaveGrupo]) {
+                                databaseOfertaCSV[llaveGrupo] = { codigo, nombre, seccion, profesor, bloquesAcumulados: [] };
+                            }
+                            if(profesor && profesor !== "Por asignar" && databaseOfertaCSV[llaveGrupo].profesor === "Por asignar") {
+                                databaseOfertaCSV[llaveGrupo].profesor = profesor;
+                            }
+                            let tipoCorto = tipoEvento.includes("AYUD") ? "Ayu" : (tipoEvento.includes("LAB") ? "Lab" : "Cát");
+                            
+                            dias.forEach(dia => {
+                                // FIX: Prevenir duplicados directos si la línea lee redundancias del archivo
+                                const yaExiste = databaseOfertaCSV[llaveGrupo].bloquesAcumulados.some(b => b.dia === dia && b.bloque === bloque && b.tipo === tipoCorto);
+                                if (!yaExiste) databaseOfertaCSV[llaveGrupo].bloquesAcumulados.push({ dia, bloque, tipo: tipoCorto });
+                            });
+                        }
                     }
                 }
-                mostrarRamosFiltrados();
+                renderizarBuscadorOferta();
             };
-            lector.readAsText(archivo, 'UTF-8');
+            lector.readAsText(archivo, 'ISO-8859-1');
         });
 
-        function mostrarRamosFiltrados() {
-            const filtroSemestre = document.getElementById('filtro-semestre').value;
+        function renderizarBuscadorOferta() {
             const buscador = document.getElementById('buscador-ramo').value.toLowerCase();
-            const listaDiv = document.getElementById('lista-ramos-oferta');
-            
-            listaDiv.innerHTML = ""; 
+            const listaDiv = document.getElementById('lista-oferta-busqueda');
+            listaDiv.innerHTML = "";
 
-            const ramosFiltrados = baseDatosRamos.filter(ramo => {
-                const coincideSemestre = filtroSemestre === "" || ramo.semestre === filtroSemestre;
-                const coincideBuscador = ramo.nombre.toLowerCase().includes(buscador);
-                return coincideSemestre && coincideBuscador;
+            let codigosMallaElegidos = Array.from(document.querySelectorAll('.chk-ramo-proyectado:checked')).map(chk => chk.dataset.codigo.replace(/-/g,"").toUpperCase());
+
+            // Agrupar secciones por Código Único de Asignatura (Subsecciones estéticas)
+            let agrupadoPorRamo = {};
+            Object.keys(databaseOfertaCSV).forEach(llave => {
+                const sec = databaseOfertaCSV[llave];
+                const cumpleMalla = codigosMallaElegidos.length === 0 || codigosMallaElegidos.includes(sec.codigo.replace(/-/g,"").toUpperCase());
+                const cumpleBuscador = sec.nombre.toLowerCase().includes(buscador) || sec.codigo.toLowerCase().includes(buscador);
+
+                if (cumpleMalla && cumpleBuscador) {
+                    if (!agrupadoPorRamo[sec.codigo]) {
+                        agrupadoPorRamo[sec.codigo] = { nombre: sec.nombre, secciones: [] };
+                    }
+                    agrupadoPorRamo[sec.codigo].secciones.push({ llave, ...sec });
+                }
             });
 
-            if (ramosFiltrados.length === 0) {
-                listaDiv.innerHTML = `<p style="color:#999; text-align:center;">No se encontraron ramos.</p>`;
+            const codigosResultado = Object.keys(agrupadoPorRamo);
+            if (codigosResultado.length === 0) {
+                listaDiv.innerHTML = "<p style='color:#999; text-align:center; font-size:11px;'>Sin resultados o selecciona de la Malla.</p>";
                 return;
             }
 
-            ramosFiltrados.forEach((ramo) => {
-                const item = document.createElement('div');
-                item.style.padding = '10px';
-                item.style.background = '#ffeff6';
-                item.style.border = '1px solid #ffb3cb';
-                item.style.borderRadius = '8px';
-                item.style.marginBottom = '8px';
-                item.style.cursor = 'pointer';
-                item.style.display = 'flex';
-                item.style.justifyContent = 'space-between';
-                item.style.alignItems = 'center';
-                item.innerHTML = `
-                    <div>
-                        <strong>${ramo.nombre}</strong><br>
-                        <span style="font-size:11px; color:#888;">Semestre ${ramo.semestre} | Bloque ${ramo.bloque}</span>
+            codigosResultado.forEach(cod => {
+                const ramo = agrupadoPorRamo[cod];
+                const estaExpandido = estadosAcordeon[cod] || false;
+
+                const contenedorGrupo = document.createElement('div');
+                contenedorGrupo.className = 'grupo-ramo-contenedor';
+
+                contenedorGrupo.innerHTML = `
+                    <div class="grupo-ramo-cabecera" data-codigo="${cod}">
+                        <span>${cod} - ${ramo.nombre}</span>
+                        <span class="flecha-indicador">${estaExpandido ? '▲' : '▼'}</span>
                     </div>
-                    <button style="background:#d63384; color:white; border:none; border-radius:12px; padding:4px 10px; font-size:11px; cursor:pointer;">+</button>
+                    <div class="grupo-ramo-secciones" style="display: ${estaExpandido ? 'block' : 'none'};"></div>
                 `;
-                
-                item.addEventListener('click', () => {
-                    const celda = document.getElementById(`celda-${ramo.bloque}-${ramo.dia}`);
-                    if (celda && celda.innerHTML !== "") {
-                        alert(`Tope de horario. No puedes agregar "${ramo.nombre}".`);
-                    } else if(celda) {
-                        celda.innerHTML = `<div class="celda-ramo" onclick="this.parentElement.innerHTML=''">${ramo.nombre} <br> <span style="font-size:9px; font-weight:normal; color:#666;">Sección CSV (X)</span></div>`;
+
+                const cuerpoSecciones = contenedorGrupo.querySelector('.grupo-ramo-secciones');
+
+                ramo.secciones.forEach(sec => {
+                    const estaFijado = seccionesFijadasManualmente.hasOwnProperty(sec.llave);
+                    const divSec = document.createElement('div');
+                    divSec.className = 'item-oferta-seccion';
+                    divSec.innerHTML = `
+                        <div>Sección: <b style="color:#d63384;">${sec.seccion}</b> <span style="font-size:10px; color:#666;">(${sec.profesor})</span></div>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <button class="btn-especificaciones" data-llave="${sec.llave}">Especificaciones</button>
+                            ${estaFijado 
+                                ? `<button class="btn-delete-seccion" data-llave="${sec.llave}">&times;</button>` 
+                                : `<button class="btn-add-seccion" data-llave="${sec.llave}">+</button>`
+                            }
+                        </div>
+                    `;
+
+                    divSec.querySelector('.btn-especificaciones').addEventListener('click', (e) => { e.stopPropagation(); abrirModalEspecificaciones(sec.llave); });
+
+                    if(!estaFijado) {
+                        divSec.querySelector('.btn-add-seccion').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            let tieneTope = false;
+                            sec.bloquesAcumulados.forEach(bInfo => {
+                                Object.values(seccionesFijadasManualmente).forEach(fija => {
+                                    fija.bloquesAcumulados.forEach(bFijo => { if (bFijo.dia === bInfo.dia && bFijo.bloque === bInfo.bloque) tieneTope = true; });
+                                });
+                            });
+                            if(tieneTope) { alert("¡Tope detectado! Choca con un bloque ocupado."); return; }
+                            seccionesFijadasManualmente[sec.llave] = databaseOfertaCSV[sec.llave];
+                            actualizarChipsFijos(); renderizarCalendario(); renderizarBuscadorOferta();
+                        });
+                    } else {
+                        divSec.querySelector('.btn-delete-seccion').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            delete seccionesFijadasManualmente[sec.llave];
+                            actualizarChipsFijos(); renderizarCalendario(); renderizarBuscadorOferta();
+                        });
                     }
+                    cuerpoSecciones.appendChild(divSec);
                 });
 
-                listaDiv.appendChild(item);
+                // Evento colapsar / expandir subsección ramo
+                contenedorGrupo.querySelector('.grupo-ramo-cabecera').addEventListener('click', function() {
+                    const esVisible = cuerpoSecciones.style.display === 'block';
+                    cuerpoSecciones.style.display = esVisible ? 'none' : 'block';
+                    this.querySelector('.flecha-indicador').innerText = esVisible ? '▼' : '▲';
+                    estadosAcordeon[cod] = !esVisible;
+                });
+
+                listaDiv.appendChild(contenedorGrupo);
             });
         }
 
-        document.getElementById('filtro-semestre').addEventListener('change', mostrarRamosFiltrados);
-        document.getElementById('buscador-ramo').addEventListener('input', mostrarRamosFiltrados);
+        function abrirModalEspecificaciones(llave) {
+            const sec = databaseOfertaCSV[llave];
+            const nCatedras = sec.bloquesAcumulados.filter(b => b.tipo === 'Cát').length;
+            const nAyudantias = sec.bloquesAcumulados.filter(b => b.tipo === 'Ayu').length;
+            const nLabs = sec.bloquesAcumulados.filter(b => b.tipo === 'Lab').length;
+
+            // FIX EXCLUSIVO TOC: Limpiar los duplicados cruzados usando Set estructurado
+            let stringsUnicos = Array.from(new Set(sec.bloquesAcumulados.map(b => `${b.dia}: Bloque ${b.bloque} (${b.tipo})`)));
+            const detalleHorarios = stringsUnicos.map(str => `<li><b>${str.split(':')[0]}:</b>${str.split(':')[1]}</li>`).join('');
+
+            document.getElementById('contenido-especificaciones').innerHTML = `
+                <div class="info-panel-item"><b>Asignatura:</b> ${sec.nombre}</div>
+                <div class="info-panel-item"><b>Código:</b> ${sec.codigo}</div>
+                <div class="info-panel-item"><b>Sección:</b> ${sec.seccion}</div>
+                <div class="info-panel-item"><b>Profesor:</b> ${sec.profesor}</div>
+                <div class="info-panel-item">
+                    <b>Estructura Semanal:</b><br>
+                    • ${nCatedras} Cátedras ${nAyudantias > 0 ? `<br>• ${nAyudantias} Ayudantías` : ''} ${nLabs > 0 ? `<br>• ${nLabs} Laboratorios` : ''}
+                </div>
+                <div class="info-panel-item">
+                    <b>Horarios Asignados:</b>
+                    <ul style="margin: 5px 0 0 15px; padding: 0;">${detalleHorarios}</ul>
+                </div>
+            `;
+            document.getElementById('modal-especificaciones').style.display = 'block';
+        }
+
+        function actualizarChipsFijos() {
+            const contenedor = document.getElementById('contenedor-chips-fijos');
+            contenedor.innerHTML = "";
+            const llaves = Object.keys(seccionesFijadasManualmente);
+            if (llaves.length === 0) { contenedor.innerHTML = '<span style="color:#999; font-size:11px;">Ninguna sección fija.</span>'; return; }
+            llaves.forEach(llave => {
+                const sec = seccionesFijadasManualmente[llave];
+                const chip = document.createElement('span');
+                chip.className = 'chip-elegido';
+                chip.innerHTML = `${sec.codigo} (${sec.seccion})`;
+                contenedor.appendChild(chip);
+            });
+        }
+
+        function renderizarCalendario() {
+            limpiarTodoElCalendario();
+            Object.values(seccionesFijadasManualmente).forEach(sec => {
+                sec.bloquesAcumulados.forEach(bInfo => {
+                    const celda = document.getElementById(`celda-${bInfo.bloque}-${bInfo.dia}`);
+                    if (celda) {
+                        celda.innerHTML = `
+                            <div class="celda-ramo">
+                                <div style="font-size:9.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sec.nombre}</div>
+                                <span style="font-size:8.5px; font-weight:normal; opacity:0.95;">${sec.seccion} [${bInfo.tipo}]</span><br>
+                                <span style="font-size:8px; font-weight:normal; opacity:0.85; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sec.profesor}</span>
+                            </div>`;
+                    }
+                });
+            });
+        }
+
+        function limpiarTodoElCalendario() {
+            for (let b = 1; b <= 8; b++) {
+                diasSemana.forEach(d => { const celda = document.getElementById(`celda-${b}-${d}`); if(celda) celda.innerHTML = ""; });
+            }
+        }
+
+        document.getElementById('filtro-semestre').addEventListener('change', inicializarListadoMallaOficial);
+        document.getElementById('buscador-ramo').addEventListener('input', renderizarBuscadorOferta);
+        window.addEventListener('DOMContentLoaded', inicializarListadoMallaOficial);
     </script>
 </body>
 </html>
