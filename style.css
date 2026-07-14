@@ -122,3 +122,24 @@ h1 {
     opacity: 0.95;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra al texto por si tu foto es muy clara */
 }
+
+.panel-horizontal {
+    display: flex; /* Esto los pone en fila */
+    gap: 15px;     /* Espacio entre ellos */
+    margin-bottom: 20px;
+    align-items: stretch; /* Para que todos tengan la misma altura */
+}
+
+.seccion-subpanel {
+    flex: 1; /* Esto hace que los 3 ocupen exactamente el mismo ancho */
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    border: 2px solid #ffb3cb;
+    box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
+}
+
+.tabla-horario {
+    width: 100%;
+    table-layout: fixed; /* Mantiene las columnas fijas para que no se mueva */
+}

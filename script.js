@@ -94,3 +94,16 @@ function desaprobarCascada(codigoDesaprobado) {
 }
 
 actualizarMalla();
+
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    return `hsl(${hash % 360}, 65%, 65%)`; // Colores pastel suaves
+}
+
+// 2. Ajusta el innerHTML dentro de renderizarCalendario:
+celda.innerHTML = `
+    <div class="celda-ramo" style="background-color: ${stringToColor(sec.nombre)}; color: white; padding: 5px; border-radius: 5px;">
+        <div style="font-weight: bold; font-size: 11px;">${sec.nombre}</div>
+        <div style="font-size: 9px;">Sec: ${sec.seccion}</div>
+    </div>`;

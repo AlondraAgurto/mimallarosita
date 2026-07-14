@@ -344,15 +344,14 @@
                 <script>
                     const diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
                     const bloquesHoras = [
-                        "Bloque 1 (08:15 - 09:25)",
-                        "Bloque 2 (09:35 - 10:45)",
-                        "Bloque 3 (10:55 - 12:05)",
-                        "Bloque 4 (12:15 - 13:25)",
-                        "Bloque 5 (14:30 - 15:40)",
-                        "Bloque 6 (15:50 - 17:00)",
-                        "Bloque 7 (17:10 - 18:20)",
-                        "Bloque 8 (18:30 - 19:40)"
-                    ];
+                    "B1 (08:30-09:50)", 
+                    "B2 (10:00-11:20)", 
+                    "B3 (11:30-12:50)", 
+                    "B4 (13:00-14:20)",
+                    "B5 (14:30-15:50)",
+                    "B6 (16:00-17:20)",
+                    "B7 (17:30-18:50)"
+                ];
                     bloquesHoras.forEach((hora, index) => {
                         const numBloque = index + 1;
                         document.write(`<tr><td class="columna-hora">${hora}</td>`);
@@ -420,10 +419,10 @@
 
         function obtenerBloquePorTextoHora(texto) {
             if (!texto) return null;
-            if (texto.includes("08:15") || texto.includes("08:30")) return 1;
-            if (texto.includes("09:35") || texto.includes("09:45")) return 2;
-            if (texto.includes("10:55") || texto.includes("10:00")) return 3; 
-            if (texto.includes("12:15") || texto.includes("13:00")) return 4; 
+            if (texto.includes("08:30") || texto.includes("08:50")) return 1;
+            if (texto.includes("10:00") || texto.includes("11:20")) return 2;
+            if (texto.includes("11:30") || texto.includes("12:50")) return 3;
+            if (texto.includes("13:00") || texto.includes("14:20")) return 4;
             if (texto.includes("14:30")) return 5;
             if (texto.includes("15:50")) return 6;
             if (texto.includes("17:10")) return 7;
