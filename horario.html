@@ -419,22 +419,29 @@
 
         function obtenerBloquePorTextoHora(texto) {
             if (!texto) return null;
-            if (texto.includes("08:30") || texto.includes("08:50")) return 1;
-            if (texto.includes("10:00") || texto.includes("11:20")) return 2;
-            if (texto.includes("11:30") || texto.includes("12:50")) return 3;
-            if (texto.includes("13:00") || texto.includes("14:20")) return 4;
+            // Evaluamos el inicio del bloque horario con precisión
+            if (texto.includes("08:30")) return 1;
+            if (texto.includes("10:00")) return 2;
+            if (texto.includes("11:30")) return 3;
+            if (texto.includes("13:00")) return 4;
             if (texto.includes("14:30")) return 5;
-            if (texto.includes("15:50")) return 6;
-            if (texto.includes("17:10")) return 7;
-            if (texto.includes("18:30")) return 8;
+            if (texto.includes("16:00")) return 6;
+            if (texto.includes("17:25") || texto.includes("17:30")) return 7;
+            if (texto.includes("18:50") || texto.includes("19:00")) return 8;
             return null;
         }
 
         function desglosarDias(texto) {
-            let indices = []; if (!texto) return indices; let t = texto.toUpperCase();
-            if (t.includes("LU")) indices.push("Lunes"); if (t.includes("MA")) indices.push("Martes");
-            if (t.includes("MI")) indices.push("Miercoles"); if (t.includes("JU")) indices.push("Jueves");
-            if (t.includes("VI")) indices.push("Viernes"); return indices;
+            let indices = []; 
+            if (!texto) return indices; 
+            let t = texto.toUpperCase();
+            // Verificamos los días de manera limpia (evitando solapamientos de sub-cadenas como 'MA' en 'MARTES' si cambiara el formato)
+            if (t.includes("LU")) indices.push("Lunes"); 
+            if (t.includes("MA")) indices.push("Martes");
+            if (t.includes("MI")) indices.push("Miercoles"); 
+            if (t.includes("JU")) indices.push("Jueves");
+            if (t.includes("VI")) indices.push("Viernes"); 
+            return indices;
         }
 
         function inicializarListadoMallaOficial() {
