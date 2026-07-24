@@ -318,6 +318,7 @@
                 <input type="text" id="buscador-ramo" class="buscador" placeholder="Buscar código o asignatura...">
                 <div id="lista-oferta-busqueda" class="lista-ramos" style="max-height: 280px;">
                     <p style="color:#999; text-align:center; font-size:11px; margin-top:15px;">Sube un CSV para buscar y fijar.</p>
+                    
                 </div>
             </div>
 
@@ -374,7 +375,7 @@
             </select>
             <label>Bloque</label>
             <select id="m-bloque">
-                <option value="1">Bloque 1</option><option value="2">Bloque 2</option><option value="3">Bloque 3</option><option value="4">Bloque 4</option><option value="5">Bloque 5</option><option value="6">Bloque 6</option><option value="7">Bloque 7</option><option value="8">Bloque 8</option>
+                <option value="1">Bloque 1</option><option value="2">Bloque 2</option><option value="3">Bloque 3</option><option value="4">Bloque 4</option><option value="5">Bloque 5</option><option value="6">Bloque 6</option><option value="7">Bloque 7</option><option value="7">Bloque 7 (17:30-18:50)</option>
             </select>
             <div class="modal-botones">
                 <button class="btn-modal-cerrar" id="btn-cerrar-manual">Cancelar</button>
@@ -642,24 +643,40 @@
         }
 
         function renderizarCalendario() {
-            limpiarTodoElCalendario();
-            Object.values(seccionesFijadasManualmente).forEach(sec => {
-                sec.bloquesAcumulados.forEach(bInfo => {
-                    const celda = document.getElementById(`celda-${bInfo.bloque}-${bInfo.dia}`);
-                    if (celda) {
-                        celda.innerHTML = `
-                            <div class="celda-ramo">
-                                <div style="font-size:9.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sec.nombre}</div>
-                                <span style="font-size:8.5px; font-weight:normal; opacity:0.95;">${sec.seccion} [${bInfo.tipo}]</span><br>
-                                <span style="font-size:8px; font-weight:normal; opacity:0.85; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sec.profesor}</span>
-                            </div>`;
-                    }
-                });
-            });
-        }
+    console.log("Renderizando...");
+    console.log(seccionesFijadasManualmente);
+
+    limpiarTodoElCalendario();
+
+    Object.values(seccionesFijadasManualmente).forEach(sec => {
+
+        console.log(sec);
+
+        sec.bloquesAcumulados.forEach(bInfo => {
+
+            console.log(bInfo);
+
+            const id = `celda-${bInfo.bloque}-${bInfo.dia}`;
+            console.log(id);
+
+            const celda = document.getElementById(id);
+            console.log(celda);
+
+            if (celda) {
+                celda.innerHTML = `
+                    <div class="celda-ramo" style="background:pink;">
+                        ${sec.nombre}
+                    </div>
+                `;
+            }
+
+        });
+
+    });
+}
 
         function limpiarTodoElCalendario() {
-            for (let b = 1; b <= 8; b++) {
+            for (let b = 1; b <= 7; b++) {
                 diasSemana.forEach(d => { const celda = document.getElementById(`celda-${b}-${d}`); if(celda) celda.innerHTML = ""; });
             }
         }

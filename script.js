@@ -94,3 +94,54 @@ function desaprobarCascada(codigoDesaprobado) {
 }
 
 actualizarMalla();
+
+const coloresRamos = [
+    { bg: '#fce4ec', border: '#f8bbd0', text: '#880e4f' }, // Rosado pastel clásico
+    { bg: '#f3e5f5', border: '#e1bee7', text: '#4a148c' }, // Lila / Rosado purpúreo
+    { bg: '#ffebee', border: '#ffcdd2', text: '#b71c1c' }, // Rosa coral suave
+    { bg: '#fce8e6', border: '#f5c6cb', text: '#a71d2a' }, // Rosa empolvado
+    { bg: '#fff0f3', border: '#ffccd5', text: '#c9184a' }, // Rosa vibrante suave
+    { bg: '#f8edeb', border: '#fcd5ce', text: '#9e2a2b' }, // Rosa terracota / nude
+    { bg: '#fae1dd', border: '#f8ad9d', text: '#6f1d1b' }  // Rosa durazno cálido
+];
+
+// 1. Tu paleta rosita
+const coloresRamos = [
+    { bg: '#fce4ec', border: '#f8bbd0', text: '#880e4f' },
+    { bg: '#f3e5f5', border: '#e1bee7', text: '#4a148c' },
+    { bg: '#ffebee', border: '#ffcdd2', text: '#b71c1c' },
+    { bg: '#fce8e6', border: '#f5c6cb', text: '#a71d2a' },
+    { bg: '#fff0f3', border: '#ffccd5', text: '#c9184a' },
+    { bg: '#f8edeb', border: '#fcd5ce', text: '#9e2a2b' },
+    { bg: '#fae1dd', border: '#f8ad9d', text: '#6f1d1b' }
+];
+
+// 2. Esta función va justo aquí abajito
+function obtenerColorRamo(codigoRamo) {
+    let hash = 0;
+    for (let i = 0; i < codigoRamo.length; i++) {
+        hash = codigoRamo.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % coloresRamos.length;
+    return coloresRamos[index];
+}
+
+// Cuando estés creando la tarjeta visual del ramo para ponerla en el calendario:
+const divRamo = document.createElement('div');
+divRamo.className = 'tarjeta-ramo'; // (o la clase que uses)
+divRamo.innerText = ramo.nombre;
+
+// 🌸 AQUÍ ES DONDE APLICAS LOS COLORES ROSITAS:
+console.log(sec);
+console.log(sec.codigo);
+const color = obtenerColorRamo(ramo.codigo);
+divRamo.style.backgroundColor = color.bg;
+divRamo.style.borderColor = color.border;
+divRamo.style.color = color.text;
+divRamo.style.borderLeft = `4px solid ${color.text}`;
+
+// Y luego lo inyectas en la celda correspondiente de tu tabla:
+const celda = document.getElementById(`celda-${bloque}-${dia}`);
+if (celda) {
+    celda.appendChild(divRamo);
+}
